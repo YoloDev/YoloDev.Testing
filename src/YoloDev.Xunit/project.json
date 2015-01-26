@@ -1,0 +1,24 @@
+﻿{
+	"version": "1.0.0-*",
+	"dependencies": {
+		"Microsoft.Framework.CommandLineUtils": { "type": "build", "version": "1.0.0-beta4-*" },
+		"Microsoft.Framework.Runtime.Interfaces": { "type": "build", "version": "1.0.0-beta4-*" },
+		"Microsoft.Framework.Runtime.Common": { "version": "1.0.0-*", "type": "build" },
+		"Microsoft.Framework.TestAdapter": "1.0.0-beta4-*",
+		"Microsoft.Framework.Runtime": "1.0.0-beta4-*",
+		"xunit.execution": "2.0.0-*"
+	},
+	"commands": {
+		"run": "run --sink \"../YoloDev.Xunit.AppVeyor|YoloDev.Xunit.AppVeyor.AppVeyorTestSink\""
+	},
+	"frameworks": {
+		"aspnet50": { },
+		"aspnetcore50": {
+			"dependencies": {
+				"System.Console": "4.0.0-*",
+				"System.Reflection": "4.0.10-*",
+				"System.Security.Cryptography.Hashing.Algorithms": "4.0.0-*"
+			}
+		}
+	}
+}

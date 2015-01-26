@@ -1,0 +1,21 @@
+﻿{
+	"version": "1.0.0-*",
+	"dependencies": {
+		"Microsoft.Framework.TestAdapter": "1.0.0-beta4-*",
+		"Newtonsoft.Json": "6.0.8"
+	},
+
+	"frameworks": {
+		"aspnet50": {
+			"frameworkAssemblies": {
+				"System.Net.Http": ""
+			}
+		},
+		"aspnetcore50": {
+			"dependencies": {
+				"System.Runtime": "4.0.20-*",
+				"System.Net.Http": "4.0.0-*"
+			}
+		}
+	}
+}
