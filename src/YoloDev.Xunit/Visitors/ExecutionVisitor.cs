@@ -1,13 +1,16 @@
 ﻿using System;
 using Microsoft.Framework.TestAdapter;
 using Xunit.Abstractions;
-using Xunit.Sdk;
+using Xunit;
 
 namespace YoloDev.Xunit.Visitors
 {
-    public class ExecutionVisitor : TestMessageVisitor<TestAssemblyFinished>
+    public class ExecutionVisitor : TestMessageVisitor<ITestAssemblyFinished>
     {
         readonly ITestExecutionSink _sink;
+        bool _hasFailures;
+
+        public bool HasFailures => _hasFailures;
 
         public ExecutionVisitor(ITestExecutionSink sink)
         {
@@ -39,6 +42,7 @@ namespace YoloDev.Xunit.Visitors
 
         protected override bool Visit(ITestFailed testFailed)
         {
+            _hasFailures = true;
             Register(TestOutcome.Failed, testFailed);
             return base.Visit(testFailed);
         }

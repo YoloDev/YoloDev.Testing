@@ -1,0 +1,38 @@
+var VERSION='0.1'
+var FULL_VERSION='0.1'
+var AUTHORS='YoloDev'
+
+use-standard-lifecycle
+k-standard-goals
+
+var IS_APPVEYOR='${E("APPVEYOR_API_URL") != null}'
+
+#install-appveyor target='test-compile' description='Installs AppVeyor sinks if running in AppVeyor environment'
+  @{
+	if(!IS_APPVEYOR) {
+		Console.WriteLine("Skipping install of AppVeyor sink, due to environment not beeing AppVeyor");
+	} else {
+		var matches = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "artifacts", "build"), "YoloDev.Xunit.AppVeyor*.nupkg");
+		string packageFile = null;
+		foreach(var match in matches) {
+			if(match.EndsWith(".symbols.nupkg")) continue;
+			packageFile = match;
+			break;
+		}
+
+		if (packageFile == null) {
+			Console.WriteLine("Package not found");
+			return;
+		}
+
+		Console.WriteLine("Found package: " + packageFile);
+		var fileName = Path.GetFileName(packageFile);
+		var version = fileName.Substring("YoloDev.Xunit.AppVeyor.".Length).Replace(".nupkg", "");
+		Console.WriteLine("Version: " + version);
+		var installLocation = Path.Combine(Directory.GetCurrentDirectory(), "packages", "YoloDev.Xunit.AppVeyor", version);
+		Console.WriteLine("Install location: " + installLocation);
+		Directory.CreateDirectory(installLocation);
+		System.IO.Compression.ZipFile.ExtractToDirectory(packageFile, installLocation);
+		E("YOLODEV_XUNIT_SINK", Path.Combine(Directory.GetCurrentDirectory(), "packages") + "|YoloDev.Xunit.AppVeyor");
+	}
+  }

@@ -11,8 +11,13 @@ namespace YoloDev.Xunit
         Test
     }
 
-    internal class TestOptions : ITestFrameworkOptions
+    internal class TestOptions : ITestFrameworkOptions, ITestFrameworkDiscoveryOptions, ITestFrameworkExecutionOptions
     {
+        public TestOptions()
+        {
+            Sink = Environment.GetEnvironmentVariable("YOLODEV_XUNIT_SINK");
+        }
+
         public string Configuration { get; set; }
 
         public int? CompilationServerPort { get; set; }

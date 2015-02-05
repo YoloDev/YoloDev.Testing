@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Framework.TestAdapter;
 using Xunit.Abstractions;
-using Xunit.Sdk;
+using Xunit;
 
 namespace YoloDev.Xunit.Visitors
 {
-    public class DiscoveryVisitor : TestMessageVisitor<DiscoveryCompleteMessage>
+    public class DiscoveryVisitor : TestMessageVisitor<IDiscoveryCompleteMessage>
     {
         readonly ITestDiscoverySink _sink;
 

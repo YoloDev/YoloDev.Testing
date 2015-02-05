@@ -46,3 +46,10 @@ artifacts
 bin
 .vs
 *.user
+
+# DotNet
+.nuget
+log.txt
+packages
+*.sln.ide
+*.suo

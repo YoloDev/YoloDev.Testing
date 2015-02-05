@@ -5,12 +5,12 @@ namespace YoloDev.Xunit.Sinks
 {
     public class DefaultTestExecutionSink : ITestExecutionSink
     {
-        public void RecordStart(Test test)
+        public void RecordStart(ITest test)
         {
             Console.WriteLine($"Started: {test.FullyQualifiedName} - {test.Id}");
         }
 
-        public void RecordResult(TestResult testResult)
+        public void RecordResult(ITestResult testResult)
         {
             Console.WriteLine($"{testResult.Outcome}: {testResult.Test.FullyQualifiedName} - {testResult.Test.Id} - {testResult.Duration}");
         }

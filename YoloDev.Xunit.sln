@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22512.0
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C3ABE8F7-1E85-467A-B6E2-50DBDAC15641}"
 EndProject
@@ -13,6 +13,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{005D16FF-9E1D-4AD0-919A-59E89C0A0B8A}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "YoloDev.Xunit.Test", "test\YoloDev.Xunit.Test\YoloDev.Xunit.Test.kproj", "{09B64C3D-94B4-4B69-9D6E-6D76769824FE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "YoloDev.Xunit.AppVeyor", "src\YoloDev.Xunit.AppVeyor\YoloDev.Xunit.AppVeyor.kproj", "{D9FC1132-0A88-41CC-B756-14B5BC8717C1}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "YoloDev.Xunit.Interfaces", "src\YoloDev.Xunit.Interfaces\YoloDev.Xunit.Interfaces.kproj", "{0D4ED9B5-CB5E-4463-86C1-868A70B22495}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +31,26 @@ Global
 		{1A59BDFC-60AA-44F1-9330-80DD86E7E032}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A59BDFC-60AA-44F1-9330-80DD86E7E032}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A59BDFC-60AA-44F1-9330-80DD86E7E032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09B64C3D-94B4-4B69-9D6E-6D76769824FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09B64C3D-94B4-4B69-9D6E-6D76769824FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09B64C3D-94B4-4B69-9D6E-6D76769824FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09B64C3D-94B4-4B69-9D6E-6D76769824FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9FC1132-0A88-41CC-B756-14B5BC8717C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9FC1132-0A88-41CC-B756-14B5BC8717C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9FC1132-0A88-41CC-B756-14B5BC8717C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9FC1132-0A88-41CC-B756-14B5BC8717C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D4ED9B5-CB5E-4463-86C1-868A70B22495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D4ED9B5-CB5E-4463-86C1-868A70B22495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D4ED9B5-CB5E-4463-86C1-868A70B22495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D4ED9B5-CB5E-4463-86C1-868A70B22495}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1A59BDFC-60AA-44F1-9330-80DD86E7E032} = {C3ABE8F7-1E85-467A-B6E2-50DBDAC15641}
+		{09B64C3D-94B4-4B69-9D6E-6D76769824FE} = {005D16FF-9E1D-4AD0-919A-59E89C0A0B8A}
+		{D9FC1132-0A88-41CC-B756-14B5BC8717C1} = {C3ABE8F7-1E85-467A-B6E2-50DBDAC15641}
+		{0D4ED9B5-CB5E-4463-86C1-868A70B22495} = {C3ABE8F7-1E85-467A-B6E2-50DBDAC15641}
 	EndGlobalSection
 EndGlobal

@@ -5,7 +5,7 @@ namespace YoloDev.Xunit.Sinks
 {
     public class DefaultTestDiscoverySink : ITestDiscoverySink
     {
-        public void SendTest(Test test)
+        public void SendTest(ITest test)
         {
             Console.WriteLine($"Discovered: {test.FullyQualifiedName}");
         }
