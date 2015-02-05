@@ -24,6 +24,7 @@ namespace YoloDev.Xunit.AppVeyor
                 return;
             }
 
+            Console.WriteLine($"Base url is set to ${uri}");
             _base = uri;
         }
 
