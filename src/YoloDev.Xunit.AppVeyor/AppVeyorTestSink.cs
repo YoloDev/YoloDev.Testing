@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Runtime.Versioning;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -7,9 +8,13 @@ namespace YoloDev.Xunit.AppVeyor
 {
     public class AppVeyorTestSink : ITestDiscoverySink, ITestExecutionSink
     {
-        Uri _base;
-        public AppVeyorTestSink()
+        readonly Uri _base;
+        readonly FrameworkName _framework;
+
+        public AppVeyorTestSink(FrameworkName framework)
         {
+            Console.WriteLine($"Running on environment: {framework.Identifier}");
+
             var url = Environment.GetEnvironmentVariable("APPVEYOR_API_URL");
             if(url == null)
             {
@@ -24,8 +29,10 @@ namespace YoloDev.Xunit.AppVeyor
                 return;
             }
 
-            Console.WriteLine($"Base url is set to {uri}");
             _base = uri;
+            _framework = framework;
+
+            Console.WriteLine($"Base url is set to {uri}");
         }
 
         public void RecordResult(ITestResult testResult)
@@ -57,9 +64,10 @@ namespace YoloDev.Xunit.AppVeyor
                 client.BaseAddress = _base;
 
                 var payload = new JObject(
-                    new JProperty("testName", new JValue(test.FullyQualifiedName)),
+                    new JProperty("testName", new JValue(TestName(test))),
                     new JProperty("testFramework", new JValue("Xunit"))
                 ).ToString(Formatting.None);
+                Console.WriteLine($"Sending payload to {request.RequestUri} using {request.Method}: {payload}");
 
                 using (var content = new StringContent(payload))
                 {
@@ -80,13 +88,14 @@ namespace YoloDev.Xunit.AppVeyor
                 client.BaseAddress = _base;
 
                 var payload = new JObject(
-                    new JProperty("testName", new JValue(result.Test.FullyQualifiedName)),
+                    new JProperty("testName", new JValue(TestName(result.Test))),
                     new JProperty("outcome", new JValue(result.Outcome.ToString())),
                     new JProperty("durationMilliseconds", new JValue(result.Duration.TotalMilliseconds)),
                     new JProperty("ErrorMessage", new JValue(result.ErrorMessage)),
                     new JProperty("ErrorStackTrace", new JValue(result.ErrorStackTrace)),
                     new JProperty("StdOut", new JValue(string.Join(Environment.NewLine, result.Messages)))
                 ).ToString(Formatting.None);
+                Console.WriteLine($"Sending payload to {request.RequestUri} using {request.Method}: {payload}");
 
                 using (var content = new StringContent(payload))
                 {
@@ -95,5 +104,8 @@ namespace YoloDev.Xunit.AppVeyor
                 }
             }
         }
+
+        private string TestName(ITest test) =>
+            $"{_framework.Identifier}: {test.FullyQualifiedName}";
     }
 }

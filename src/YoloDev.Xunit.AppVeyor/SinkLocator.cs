@@ -1,20 +1,21 @@
 ﻿using System;
+using Microsoft.Framework.Runtime;
 
 [assembly: YoloDev.Xunit.AppVeyor.SinkLocator]
 
 namespace YoloDev.Xunit.AppVeyor
 {
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class SinkLocatorAttribute : Attribute, ITestSinkLocator
+    public class SinkLocatorAttribute : Attribute, ITestSinkFactory
     {
-        public ITestDiscoverySink CreateDiscoverySink()
+        public ITestDiscoverySink CreateDiscoverySink(IServiceProvider services)
         {
-            return new AppVeyorTestSink();
+            return new AppVeyorTestSink(services.Get<IApplicationEnvironment>().RuntimeFramework);
         }
 
-        public ITestExecutionSink CreateExecutionSink()
+        public ITestExecutionSink CreateExecutionSink(IServiceProvider services)
         {
-            return new AppVeyorTestSink();
+            return new AppVeyorTestSink(services.Get<IApplicationEnvironment>().RuntimeFramework);
         }
     }
 }

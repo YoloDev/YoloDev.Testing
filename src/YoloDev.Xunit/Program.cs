@@ -140,14 +140,14 @@ namespace YoloDev.Xunit
                 {
                     var assembly = dependencyLoader.Load(parts[1], context);
                     var locator = assembly.GetCustomAttributes()
-                        .OfType<ITestSinkLocator>()
+                        .OfType<ITestSinkFactory>()
                         .FirstOrDefault();
 
                     if(locator == null)
                         throw new InvalidOperationException($"No assembly attribute found that implements the interface 'ITestSinkLocator' in the assembly ${assembly.GetName().Name}");
 
                     var testServices = new ServiceProvider(_services);
-                    testServices.Add(typeof(ITestSinkLocator), locator);
+                    testServices.Add(typeof(ITestSinkFactory), locator);
 
                     return RunTestAssembly(options, ".", _container, testServices) ? 0 : -1;
                 }
@@ -205,14 +205,14 @@ namespace YoloDev.Xunit
 
         private void DiscoverTests(TestOptions options, IFrontController frontController, IServiceProvider services)
         {
-            var visitor = new DiscoveryVisitor((services.GetService(typeof(ITestSinkLocator)) as ITestSinkLocator)?.CreateDiscoverySink() ?? new DefaultTestDiscoverySink());
+            var visitor = new DiscoveryVisitor((services.GetService(typeof(ITestSinkFactory)) as ITestSinkFactory)?.CreateDiscoverySink(services) ?? new DefaultTestDiscoverySink());
             frontController.Find(true, visitor, options);
             visitor.Finished.WaitOne();
         }
 
         private bool RunTests(TestOptions options, IFrontController frontController, IServiceProvider services)
         {
-            var visitor = new ExecutionVisitor((services.GetService(typeof(ITestSinkLocator)) as ITestSinkLocator)?.CreateExecutionSink() ?? new DefaultTestExecutionSink());
+            var visitor = new ExecutionVisitor((services.GetService(typeof(ITestSinkFactory)) as ITestSinkFactory)?.CreateExecutionSink(services) ?? new DefaultTestExecutionSink());
             frontController.RunAll(visitor, options, options);
             visitor.Finished.WaitOne();
             return !visitor.HasFailures;
