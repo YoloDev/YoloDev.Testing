@@ -20,11 +20,11 @@ namespace YoloDev.Xunit.AppVeyor
             Uri uri;
             if(!Uri.TryCreate(url, UriKind.Absolute, out uri))
             {
-                Console.WriteLine($"APPVEYOR_API_URL ${url} is not a valid URI. Not sending messages.");
+                Console.WriteLine($"APPVEYOR_API_URL {url} is not a valid URI. Not sending messages.");
                 return;
             }
 
-            Console.WriteLine($"Base url is set to ${uri}");
+            Console.WriteLine($"Base url is set to {uri}");
             _base = uri;
         }
 

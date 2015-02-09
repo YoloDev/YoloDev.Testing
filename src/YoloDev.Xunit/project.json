@@ -3,8 +3,8 @@
 	"dependencies": {
 		"Microsoft.Framework.CommandLineUtils": { "type": "build", "version": "1.0.0-beta4-*" },
 		"Microsoft.Framework.Runtime.Interfaces": { "type": "build", "version": "1.0.0-beta4-*" },
-    "Microsoft.Framework.Runtime.Common": { "type": "build", "version": "1.0.0-*" },
-    "YoloDev.Xunit.Interfaces": { "type": "build", "version": "" },
+		"Microsoft.Framework.Runtime.Common": { "type": "build", "version": "1.0.0-*" },
+		"YoloDev.Xunit.Interfaces": { "type": "build", "version": "" },
 		"Microsoft.Framework.TestAdapter": "1.0.0-beta4-*",
 		"Microsoft.Framework.Runtime": "1.0.0-beta4-*",
 		"xunit.runner.utility": "2.0.0-*"
@@ -18,7 +18,9 @@
 			"dependencies": {
 				"System.Console": "4.0.0-*",
 				"System.Reflection": "4.0.10-*",
-				"System.Security.Cryptography.Hashing.Algorithms": "4.0.0-*"
+				"System.Security.Cryptography.Hashing.Algorithms": "4.0.0-*",
+				"System.Threading": "4.0.0-*",
+				"System.Threading.ExecutionContext": "4.0.0-*"
 			}
 		}
 	}

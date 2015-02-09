@@ -40,7 +40,8 @@ namespace YoloDev.Xunit
 
         public int Main(string[] args)
         {
-            //Debugger.Launch();
+            Debugger.Launch();
+            Console.WriteLine($"YoloDev.Xunit: {GetVersion()}");
             TestOptions options;
             int exitCode;
 
@@ -180,25 +181,21 @@ namespace YoloDev.Xunit
                 host.Initialize();
                 var libraryManager = (ILibraryManager)host.ServiceProvider.GetService(typeof(ILibraryManager));
                 var assemblies = libraryManager.GetLibraryInformation(applicationName).LoadableAssemblies.Select(Assembly.Load);
-                var executionAssemblies = libraryManager.GetLibraryInformation("xunit.extensibility.execution").LoadableAssemblies
-                    .Select(Assembly.Load);
-                var assemblyInfoType = executionAssemblies.Select(a => a.GetType("Xunit.Sdk.ReflectionAssemblyInfo")).First();
-                var frameworkType = executionAssemblies.Select(a => a.GetType("Xunit.Sdk.TestFrameworkProxy")).First();
 
                 foreach (var assembly in assemblies)
                 {
-                    var info = (IAssemblyInfo)Activator.CreateInstance(assemblyInfoType, assembly.GetName().Name);
-                    var testFramework = (ITestFramework)Activator.CreateInstance(frameworkType, info, new NullSourceInformationProvider());
-
-                    switch (options.RunKind)
+                    using (var framework = new Xunit2(new NullSourceInformationProvider(), assembly.GetName().Name))
                     {
-                    case RunKind.List:
-                        DiscoverTests(options, testFramework, info, services);
-                        break;
+                        switch (options.RunKind)
+                        {
+                        case RunKind.List:
+                            DiscoverTests(options, framework, services);
+                            break;
 
-                    default:
-                        success = RunTests(options, testFramework, assembly.GetName(), services) && success;
-                        break;
+                        default:
+                            success = RunTests(options, framework, services) && success;
+                            break;
+                        }
                     }
                 }
             }
@@ -206,25 +203,19 @@ namespace YoloDev.Xunit
             return success;
         }
 
-        private void DiscoverTests(TestOptions options, ITestFramework framework, IAssemblyInfo assemblyInfo, IServiceProvider services)
+        private void DiscoverTests(TestOptions options, IFrontController frontController, IServiceProvider services)
         {
-            using (var discoverer = framework.GetDiscoverer(assemblyInfo))
-            {
-                var visitor = new DiscoveryVisitor((services.GetService(typeof(ITestSinkLocator)) as ITestSinkLocator)?.CreateDiscoverySink() ?? new DefaultTestDiscoverySink());
-                discoverer.Find(true, visitor, options);
-                visitor.Finished.WaitOne();
-            }
+            var visitor = new DiscoveryVisitor((services.GetService(typeof(ITestSinkLocator)) as ITestSinkLocator)?.CreateDiscoverySink() ?? new DefaultTestDiscoverySink());
+            frontController.Find(true, visitor, options);
+            visitor.Finished.WaitOne();
         }
 
-        private bool RunTests(TestOptions options, ITestFramework framework, AssemblyName assemblyName, IServiceProvider services)
+        private bool RunTests(TestOptions options, IFrontController frontController, IServiceProvider services)
         {
-            using (var executor = framework.GetExecutor(assemblyName))
-            {
-                var visitor = new ExecutionVisitor((services.GetService(typeof(ITestSinkLocator)) as ITestSinkLocator)?.CreateExecutionSink() ?? new DefaultTestExecutionSink());
-                executor.RunAll(visitor, options, options);
-                visitor.Finished.WaitOne();
-                return !visitor.HasFailures;
-            }
+            var visitor = new ExecutionVisitor((services.GetService(typeof(ITestSinkLocator)) as ITestSinkLocator)?.CreateExecutionSink() ?? new DefaultTestExecutionSink());
+            frontController.RunAll(visitor, options, options);
+            visitor.Finished.WaitOne();
+            return !visitor.HasFailures;
         }
 
         private static string GetVersion()

@@ -1,28 +1,28 @@
 ﻿{
-  "version": "1.0.0-*",
-  "dependencies": {
-    "YoloDev.Xunit.Interfaces": {"type": "build", "version": ""},
-    "Newtonsoft.Json": "6.0.8"
-  },
+	"version": "1.0.0-*",
+	"dependencies": {
+		"YoloDev.Xunit.Interfaces": { "type": "build", "version": "" },
+		"Newtonsoft.Json": "6.0.8"
+	},
 
-  "frameworks": {
-    "aspnet50": {
-      "frameworkAssemblies": {
-        "System.Net.Http": ""
-      }
-    },
-    "aspnetcore50": {
-      "dependencies": {
-        "System.Runtime": "4.0.20-*",
-        "System.Net.Http": "4.0.0-*",
-        "System.Console": "4.0.0-*"
-      }
-    }
-  },
+	"frameworks": {
+		"aspnet50": {
+			"frameworkAssemblies": {
+				"System.Net.Http": ""
+			}
+		},
+		"aspnetcore50": {
+			"dependencies": {
+				"System.Runtime": "4.0.20-*",
+				"System.Net.Http": "4.0.0-*",
+				"System.Console": "4.0.0-*"
+			}
+		}
+	},
 
-  "scripts": {
-    "postpack": [
-      "%project:Directory%/../../build/batchcopy %project:BuildOutputDir%/Debug/*.nupkg %project:Directory%/../../artifacts/build/YoloDev.Xunit.AppVeyor/%project:Version%"
-    ]
-  }
+	"scripts": {
+		"postpack": [
+			"%project:Directory%/../../build/batchcopy %project:BuildOutputDir%/Debug/*.nupkg %project:Directory%/../../artifacts/build/YoloDev.Xunit.AppVeyor/%project:Version%"
+		]
+	}
 }
