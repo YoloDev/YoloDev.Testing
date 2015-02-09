@@ -94,8 +94,9 @@ namespace YoloDev.Xunit.AppVeyor
                 using (var content = new StringContent(payload))
                 {
                     request.Content = content;
-                    var result = client.SendAsync(request).Result.EnsureSuccessStatusCode();
+                    var result = client.SendAsync(request).Result;
                     Console.WriteLine($"Result payload is {result.Content.ReadAsStringAsync().Result}");
+                    result.EnsureSuccessStatusCode();
                 }
             }
         }
@@ -124,8 +125,9 @@ namespace YoloDev.Xunit.AppVeyor
                 using (var content = new StringContent(payload))
                 {
                     request.Content = content;
-                    var r = client.SendAsync(request).Result.EnsureSuccessStatusCode();
+                    var r = client.SendAsync(request).Result;
                     Console.WriteLine($"Result payload is {r.Content.ReadAsStringAsync().Result}");
+                    r.EnsureSuccessStatusCode();
                 }
             }
         }
