@@ -40,7 +40,7 @@ namespace YoloDev.Xunit
 
         public int Main(string[] args)
         {
-            Debugger.Launch();
+            //Debugger.Launch();
             Console.WriteLine($"YoloDev.Xunit: {GetVersion()}");
             TestOptions options;
             int exitCode;
