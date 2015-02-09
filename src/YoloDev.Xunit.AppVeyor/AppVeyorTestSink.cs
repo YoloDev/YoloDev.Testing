@@ -16,14 +16,14 @@ namespace YoloDev.Xunit.AppVeyor
             Console.WriteLine($"Running on environment: {framework.Identifier}");
 
             var url = Environment.GetEnvironmentVariable("APPVEYOR_API_URL");
-            if(url == null)
+            if (url == null)
             {
                 Console.WriteLine("No APPVEYOR_API_URL environment variable found. Not sending messages.");
                 return;
             }
 
             Uri uri;
-            if(!Uri.TryCreate(url, UriKind.Absolute, out uri))
+            if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
             {
                 Console.WriteLine($"APPVEYOR_API_URL {url} is not a valid URI. Not sending messages.");
                 return;
@@ -38,19 +38,40 @@ namespace YoloDev.Xunit.AppVeyor
         public void RecordResult(ITestResult testResult)
         {
             Console.WriteLine($"{testResult.Outcome}: {testResult.Test.FullyQualifiedName} - {testResult.Test.Id} - {testResult.Duration}");
-            RegisterResult(testResult);
+            try
+            {
+                RegisterResult(testResult);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.ToString());
+            }
         }
 
         public void RecordStart(ITest test)
         {
             Console.WriteLine($"Started: {test.FullyQualifiedName} - {test.Id}");
-            RegisterTest(test);
+            try
+            {
+                RegisterTest(test);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.ToString());
+            }
         }
 
         public void SendTest(ITest test)
         {
             Console.WriteLine($"Discovered: {test.FullyQualifiedName}");
-            RegisterTest(test);
+            try
+            {
+                RegisterTest(test);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.ToString());
+            }
         }
 
         private void RegisterTest(ITest test)
