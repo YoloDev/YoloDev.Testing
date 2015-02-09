@@ -56,13 +56,14 @@ namespace YoloDev.Xunit.AppVeyor
         private void RegisterTest(ITest test)
         {
             if (_base == null)
+            {
+                Console.WriteLine($"Skipping since {nameof(_base)} is null");
                 return;
+            }
 
             using (var client = new HttpClient())
-            using (var request = new HttpRequestMessage(HttpMethod.Post, "api/test"))
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_base}api/test"))
             {
-                client.BaseAddress = _base;
-
                 var payload = new JObject(
                     new JProperty("testName", new JValue(TestName(test))),
                     new JProperty("testFramework", new JValue("Xunit"))
@@ -72,7 +73,8 @@ namespace YoloDev.Xunit.AppVeyor
                 using (var content = new StringContent(payload))
                 {
                     request.Content = content;
-                    client.SendAsync(request).Result.EnsureSuccessStatusCode();
+                    var result = client.SendAsync(request).Result.EnsureSuccessStatusCode();
+                    Console.WriteLine($"Result payload is {result.Content.ReadAsStringAsync().Result}");
                 }
             }
         }
@@ -80,13 +82,14 @@ namespace YoloDev.Xunit.AppVeyor
         private void RegisterResult(ITestResult result)
         {
             if (_base == null)
+            {
+                Console.WriteLine($"Skipping since {nameof(_base)} is null");
                 return;
+            }
 
             using (var client = new HttpClient())
-            using (var request = new HttpRequestMessage(HttpMethod.Put, "api/test"))
+            using (var request = new HttpRequestMessage(HttpMethod.Put, $"{_base}api/test"))
             {
-                client.BaseAddress = _base;
-
                 var payload = new JObject(
                     new JProperty("testName", new JValue(TestName(result.Test))),
                     new JProperty("outcome", new JValue(result.Outcome.ToString())),
@@ -100,7 +103,8 @@ namespace YoloDev.Xunit.AppVeyor
                 using (var content = new StringContent(payload))
                 {
                     request.Content = content;
-                    client.SendAsync(request).Result.EnsureSuccessStatusCode();
+                    var r = client.SendAsync(request).Result.EnsureSuccessStatusCode();
+                    Console.WriteLine($"Result payload is {r.Content.ReadAsStringAsync().Result}");
                 }
             }
         }
