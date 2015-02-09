@@ -23,24 +23,28 @@ namespace YoloDev.Xunit
         readonly IServiceProvider _services;
         readonly IAssemblyLoadContextFactory _loadContextFactory;
         readonly IAssemblyLoadContextAccessor _loadContextAccessor;
+        readonly IFrameworkReferenceResolver _frameworkReferenceResolver;
 
         public Program(
             IAssemblyLoaderContainer container,
             IApplicationEnvironment environment,
             IServiceProvider services,
             IAssemblyLoadContextFactory loadContextFactory,
-            IAssemblyLoadContextAccessor loadContextAccessor)
+            IAssemblyLoadContextAccessor loadContextAccessor,
+            IFrameworkReferenceResolver referenceResolver)
         {
             _container = container;
             _environment = environment;
             _services = services;
             _loadContextFactory = loadContextFactory;
             _loadContextAccessor = loadContextAccessor;
+            _frameworkReferenceResolver = referenceResolver;
         }
 
         public int Main(string[] args)
         {
-            //Debugger.Launch();
+            //if (_environment.RuntimeFramework.FullName.IndexOf("core", StringComparison.OrdinalIgnoreCase) == -1)
+            //    Debugger.Launch();
             Console.WriteLine($"YoloDev.Xunit: {GetVersion()}");
             TestOptions options;
             int exitCode;
@@ -134,8 +138,10 @@ namespace YoloDev.Xunit
                 dependencyResolver.Initialize(new[] { lib }, _environment.RuntimeFramework);
                 
                 var dependencyLoader = new NuGetAssemblyLoader(_loadContextAccessor, dependencyResolver);
+                var referenceLoader = new ReferenceLoader(_frameworkReferenceResolver, _environment.RuntimeFramework);
 
                 using (_container.AddLoader(dependencyLoader))
+                using (_container.AddLoader(referenceLoader))
                 using (var context = _loadContextFactory.Create())
                 {
                     var assembly = dependencyLoader.Load(parts[1], context);
@@ -143,7 +149,7 @@ namespace YoloDev.Xunit
                         .OfType<ITestSinkFactory>()
                         .FirstOrDefault();
 
-                    if(locator == null)
+                    if (locator == null)
                         throw new InvalidOperationException($"No assembly attribute found that implements the interface 'ITestSinkLocator' in the assembly ${assembly.GetName().Name}");
 
                     var testServices = new ServiceProvider(_services);

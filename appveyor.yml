@@ -15,8 +15,8 @@ build_script:
 artifacts:
   - path: artifacts\build\*.nupkg
 
-#deploy:
-#  - provider: Environment
-#    name: yolodev
-#    on:
-#      branch: master
+deploy:
+  - provider: Environment
+    name: yolodev
+    on:
+      branch: master
